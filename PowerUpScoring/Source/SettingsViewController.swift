@@ -16,9 +16,11 @@ class SettingsViewController: UIViewController {
 	@IBOutlet var redSwitchLeft:UIImageView?
 	@IBOutlet var redSwitchRight:UIImageView?
 	@IBOutlet var gameStringLabel:UILabel?
+	@IBOutlet var startButton:UIButton?
 
 	@IBAction func start(sender:UIButton) {
-		
+		AppDelegate.manager.defaultSocket.emit("start",
+											   ["gameString":GameState.getGameString()]);
 	}
 	
 	@IBAction func randomize(sender:UIButton) {
@@ -30,14 +32,29 @@ class SettingsViewController: UIViewController {
 		blueSwitchLeft?.image = redSwitchLeft?.image!;
 		scaleLeft?.image = UIImage.init(named: GameState.isScaleLeft ? "red-unselected.png" : "blue-unselected.png");
 		scaleRight?.image = UIImage.init(named: GameState.isScaleLeft ? "blue-unselected.png" : "red-unselected.png");
-
 	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+		AppDelegate.manager.defaultSocket.on("start") { data, ack in
+			GameState.setGameString(str: data[0] as! String);
+			GameState.scaleState = 0;
+			GameState.switchBlue = false;
+			GameState.switchRed = false;
+			self.startButton?.isEnabled = false;
+			GameState.gameActive = true;
+		};
+		AppDelegate.manager.defaultSocket.on("end") { data, ack in
+			self.startButton?.isEnabled = true;
+			GameState.gameActive = false;
+		};
         // Do any additional setup after loading the view.
     }
+	
+	deinit {
+		AppDelegate.manager.defaultSocket.off("start");
+		AppDelegate.manager.defaultSocket.off("end");
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

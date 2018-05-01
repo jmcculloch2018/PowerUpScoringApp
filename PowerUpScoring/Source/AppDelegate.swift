@@ -7,14 +7,16 @@
 //
 
 import UIKit
-
+import SocketIO
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	public static var manager:SocketManager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress]);
 
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+		AppDelegate.manager.defaultSocket.connect();
 		// Override point for customization after application launch.
 		return true
 	}

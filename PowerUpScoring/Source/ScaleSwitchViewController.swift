@@ -9,6 +9,7 @@
 import UIKit
 
 class ScaleSwitchViewController: UIViewController {
+	
 	@IBOutlet var redSwitchLeft:UIButton?
 	@IBOutlet var redSwitchRight:UIButton?
 	@IBOutlet var blueSwitchLeft:UIButton?
@@ -21,40 +22,60 @@ class ScaleSwitchViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setScaleState(nScaleState: GameState.scaleState);
-		setSwitchBlue(bSwitchBlue: GameState.switchBlue)
-		setSwitchRed(bSwitchRed: GameState.switchRed);
+		setScaleState(nScaleState: GameState.scaleState, emit:false);
+		setSwitchBlue(bSwitchBlue: GameState.switchBlue, emit:false)
+		setSwitchRed(bSwitchRed: GameState.switchRed, emit:false);
+		AppDelegate.manager.defaultSocket.on("setSwitchRed") {data, ack in
+			self.setSwitchRed(bSwitchRed: data[0] as! Bool, emit: false);
+		};
+		AppDelegate.manager.defaultSocket.on("setSwitchBlue") {data, ack in
+			self.setSwitchBlue(bSwitchBlue: data[0] as! Bool, emit: false);
+		};
+		AppDelegate.manager.defaultSocket.on("setScaleState") {data, ack in
+			self.setScaleState(nScaleState: data[0] as! Int, emit: false);
+		};
 	}
+	
+	deinit {
+		AppDelegate.manager.defaultSocket.off("setSwitchRed");
+		AppDelegate.manager.defaultSocket.off("setSwitchBlue");
+		AppDelegate.manager.defaultSocket.off("setScaleState");
+	}
+	
+	
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		setScaleState(nScaleState: GameState.scaleState);
-		setSwitchBlue(bSwitchBlue: GameState.switchBlue)
-		setSwitchRed(bSwitchRed: GameState.switchRed);
+		setScaleState(nScaleState: GameState.scaleState, emit:false);
+		setSwitchBlue(bSwitchBlue: GameState.switchBlue, emit:false)
+		setSwitchRed(bSwitchRed: GameState.switchRed, emit:false);
 	}
 	
 	@IBAction func redSwitchLeft(sender:UIButton) {
-		setSwitchRed(bSwitchRed: GameState.isSwitchLeft);
+		setSwitchRed(bSwitchRed: GameState.isSwitchLeft, emit:true);
 	}
 	@IBAction func redSwitchRight(sender:UIButton) {
-		setSwitchRed(bSwitchRed: !GameState.isSwitchLeft);
+		setSwitchRed(bSwitchRed: !GameState.isSwitchLeft, emit:true);
 	}
 	@IBAction func blueSwitchLeft(sender:UIButton) {
-		setSwitchBlue(bSwitchBlue: !GameState.isSwitchLeft)
+		setSwitchBlue(bSwitchBlue: !GameState.isSwitchLeft, emit:true)
 	}
 	@IBAction func blueSwitchRight(sender:UIButton) {
-		setSwitchBlue(bSwitchBlue: GameState.isSwitchLeft)
+		setSwitchBlue(bSwitchBlue: GameState.isSwitchLeft, emit:true)
 	}
 	@IBAction func scaleLeft(sender:UIButton) {
-		setScaleState(nScaleState: GameState.isScaleLeft ? 1 : -1)
+		setScaleState(nScaleState: GameState.isScaleLeft ? 1 : -1, emit:true)
 	}
 	@IBAction func scaleRight(sender:UIButton) {
-		setScaleState(nScaleState: GameState.isScaleLeft ? -1 : 1)
+		setScaleState(nScaleState: GameState.isScaleLeft ? -1 : 1, emit:true)
 	}
 	@IBAction func scaleMiddle(sender:UIButton) {
-		setScaleState(nScaleState: 0)
+		setScaleState(nScaleState: 0, emit:true)
 	}
-	func setSwitchRed(bSwitchRed:Bool) { // close side
+	func setSwitchRed(bSwitchRed:Bool, emit:Bool) { // close side
+		if (emit) {
+			AppDelegate.manager.defaultSocket.emit("setSwitchRed", [bSwitchRed]);
+		}
 		GameState.switchRed = bSwitchRed;
 		let coloredButton = GameState.isSwitchLeft ? redSwitchLeft! : redSwitchRight!;
 		let neutralButton = GameState.isSwitchLeft ? redSwitchRight! : redSwitchLeft!;
@@ -62,7 +83,10 @@ class ScaleSwitchViewController: UIViewController {
 		neutralButton.setBackgroundImage(UIImage.init(named:bSwitchRed ? "gray-unselected.png" : "gray-selected.png" ), for: UIControlState.normal);
 	}
 	
-	func setSwitchBlue(bSwitchBlue:Bool) -> Void { // far side
+	func setSwitchBlue(bSwitchBlue:Bool, emit:Bool) -> Void { // far side
+		if (emit) {
+			AppDelegate.manager.defaultSocket.emit("setSwitchBlue", [bSwitchBlue]);
+		}
 		GameState.switchBlue = bSwitchBlue;
 		let coloredButton = GameState.isSwitchLeft ? blueSwitchRight! : blueSwitchLeft!;
 		let neutralButton = GameState.isSwitchLeft ? blueSwitchLeft! : blueSwitchRight!;
@@ -70,7 +94,10 @@ class ScaleSwitchViewController: UIViewController {
 		neutralButton.setBackgroundImage(UIImage.init(named:bSwitchBlue ? "gray-unselected.png" : "gray-selected.png" ), for: UIControlState.normal);
 	}
 	
-	func setScaleState(nScaleState:Int) -> Void {
+	func setScaleState(nScaleState:Int, emit:Bool) -> Void {
+		if (emit) {
+			AppDelegate.manager.defaultSocket.emit("setScaleState", [nScaleState]);
+		}
 		GameState.scaleState = nScaleState;
 		let redButton = GameState.isScaleLeft ? scaleLeft! : scaleRight!;
 		let blueButton = GameState.isScaleLeft ? scaleRight! : scaleLeft!;

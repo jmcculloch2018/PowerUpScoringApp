@@ -12,6 +12,7 @@ class GameState: NSObject {
 	static var isSwitchLeft = false, isScaleLeft = false;
 	static var switchRed = false, switchBlue = false;
 	static var scaleState = 0; // 1 = red, -1 = blue
+	static var gameActive = false;
 	static func randomize() {
 		let rand = arc4random();
 		isSwitchLeft = rand & 0x01 != 0;
@@ -22,4 +23,9 @@ class GameState: NSObject {
 		let scaleStr = isScaleLeft ? "L" : "R";
 		return switchStr + scaleStr + switchStr;
 	}
+	static func setGameString(str:String) {
+		isSwitchLeft = str[str.startIndex] == "L";
+		isScaleLeft = str[str.index(str.startIndex, offsetBy: 1)] == "L";
+	}
+
 }
