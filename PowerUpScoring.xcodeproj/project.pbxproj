@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		201B31B420991AEC00D9EA60 /* RefereeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B31B320991AEC00D9EA60 /* RefereeViewController.swift */; };
 		205CBEC72097F86200BE0A94 /* power-cube-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 205CBEC62097F86100BE0A94 /* power-cube-gray.png */; };
 		205CBECB2097F87300BE0A94 /* boost-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 205CBEC82097F87100BE0A94 /* boost-gray.png */; };
 		205CBECC2097F87300BE0A94 /* levitate-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 205CBEC92097F87200BE0A94 /* levitate-gray.png */; };
@@ -64,6 +65,7 @@
 /* Begin PBXFileReference section */
 		15EBD3FC8DC18169F5B1E4DF /* Pods-PowerUpScoringTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PowerUpScoringTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PowerUpScoringTests/Pods-PowerUpScoringTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1E5472A1F0EB21622B3778C7 /* Pods-PowerUpScoring.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PowerUpScoring.release.xcconfig"; path = "Pods/Target Support Files/Pods-PowerUpScoring/Pods-PowerUpScoring.release.xcconfig"; sourceTree = "<group>"; };
+		201B31B320991AEC00D9EA60 /* RefereeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefereeViewController.swift; sourceTree = "<group>"; };
 		205CBEC62097F86100BE0A94 /* power-cube-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "power-cube-gray.png"; sourceTree = "<group>"; };
 		205CBEC82097F87100BE0A94 /* boost-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "boost-gray.png"; sourceTree = "<group>"; };
 		205CBEC92097F87200BE0A94 /* levitate-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "levitate-gray.png"; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				20E522A9206CCAF200BF8124 /* ScaleSwitchViewController.swift */,
 				20E522AC206D51F100BF8124 /* SettingsViewController.swift */,
 				20E52252206C03E500BF8124 /* AppDelegate.swift */,
+				201B31B320991AEC00D9EA60 /* RefereeViewController.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20E52253206C03E500BF8124 /* AppDelegate.swift in Sources */,
+				201B31B420991AEC00D9EA60 /* RefereeViewController.swift in Sources */,
 				20E522B1206D591B00BF8124 /* GameState.swift in Sources */,
 				20E522AA206CCAF200BF8124 /* ScaleSwitchViewController.swift in Sources */,
 				2084FF352097F26B0098373C /* HumanPlayerViewController.swift in Sources */,
