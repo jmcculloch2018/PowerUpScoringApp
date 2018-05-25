@@ -13,6 +13,13 @@ class GameState: NSObject {
 	static var switchRed = false, switchBlue = false;
 	static var scaleState = 0; // 1 = red, -1 = blue
 	static var gameActive = false;
+	static func reset() {
+		randomize();
+		scaleState = 0;
+		switchRed = false;
+		switchBlue = false;
+		gameActive = false;
+	}
 	static func randomize() {
 		let rand = arc4random();
 		isSwitchLeft = rand & 0x01 != 0;

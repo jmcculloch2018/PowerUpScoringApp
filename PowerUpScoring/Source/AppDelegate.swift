@@ -13,13 +13,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
 	public static var manager:SocketManager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress]);
+	public static var functions = [String:(([Any]) -> Void)]();
 
-
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+	static func attemptConnection(ip:String) {
+		manager.disconnect();
+		manager = SocketManager(socketURL: URL(string: "http://" + ip + ":3000")!, config: [.log(true), .compress])
 		AppDelegate.manager.defaultSocket.connect();
-		// Override point for customization after application launch.
+		for (event, callback) in functions {
+			manager.defaultSocket.on(event) {data, ack in
+				callback(data);
+			};
+		}
+	}
+	
+	static func on(event:String, callback:@escaping([Any]) -> Void) {
+		if (functions[event] == nil) {
+			functions[event] = callback;
+		} else {
+			let oldFunc = functions[event]!;
+			functions[event] = { data in
+				oldFunc(data);
+				callback(data);
+				
+			}
+		}
+		manager.defaultSocket.on(event) {data, ack in
+			callback(data);
+		};
+	}
+	
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+		AppDelegate.attemptConnection(ip: "localhost");
+		AppDelegate.on(event: "reset", callback: {data in
+			GameState.reset();
+		});
 		return true
 	}
+	
+	
 
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

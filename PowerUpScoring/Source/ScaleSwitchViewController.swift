@@ -25,23 +25,24 @@ class ScaleSwitchViewController: UIViewController {
 		setScaleState(nScaleState: GameState.scaleState, emit:false);
 		setSwitchBlue(bSwitchBlue: GameState.switchBlue, emit:false)
 		setSwitchRed(bSwitchRed: GameState.switchRed, emit:false);
-		AppDelegate.manager.defaultSocket.on("setSwitchRed") {data, ack in
+		
+		AppDelegate.on(event: "reset", callback: { data in
+			GameState.reset();
+			self.setScaleState(nScaleState: GameState.scaleState, emit:false);
+			self.setSwitchBlue(bSwitchBlue: GameState.switchBlue, emit:false)
+			self.setSwitchRed(bSwitchRed: GameState.switchRed, emit:false);
+		});
+		AppDelegate.on(event: "setSwitchRed", callback: {data in
 			self.setSwitchRed(bSwitchRed: data[0] as! Bool, emit: false);
-		};
-		AppDelegate.manager.defaultSocket.on("setSwitchBlue") {data, ack in
+		});
+		AppDelegate.on(event: "setSwitchBlue", callback: {data in
 			self.setSwitchBlue(bSwitchBlue: data[0] as! Bool, emit: false);
-		};
-		AppDelegate.manager.defaultSocket.on("setScaleState") {data, ack in
+		});
+		AppDelegate.on(event: "setScaleState", callback: {data in
 			self.setScaleState(nScaleState: data[0] as! Int, emit: false);
-		};
+		});
+		
 	}
-	
-	deinit {
-		AppDelegate.manager.defaultSocket.off("setSwitchRed");
-		AppDelegate.manager.defaultSocket.off("setSwitchBlue");
-		AppDelegate.manager.defaultSocket.off("setScaleState");
-	}
-	
 	
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -153,8 +153,21 @@ class HumanPlayerViewController: UIViewController, UIPickerViewDataSource, UIPic
 		
 		let pickerView = UIPickerView()
 		pickerView.delegate = self
-		
 		pickerTextField.inputView = pickerView
+		
+		AppDelegate.on(event: "reset", callback: {data in
+			self.reset()
+		});
+		
+		reset();
+		
+		
+		
+
+        // Do any additional setup after loading the view.
+    }
+	
+	func reset() {
 		
 		levitate1?.setImage(cubeGray, for: UIControlState.normal)
 		levitate1?.setImage(cubeGray, for: UIControlState.selected)
@@ -179,12 +192,7 @@ class HumanPlayerViewController: UIViewController, UIPickerViewDataSource, UIPic
 		boost3?.setImage(cubeGray, for: UIControlState.normal)
 		boost3?.setImage(cubeGray, for: UIControlState.selected)
 		boost?.image = boostGray;
-		
-		
-
-        // Do any additional setup after loading the view.
-    }
-	
+	}
 	
 
     override func didReceiveMemoryWarning() {
