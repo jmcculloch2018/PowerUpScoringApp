@@ -14,7 +14,7 @@ class GameState: NSObject {
 	static var scaleState = 0; // 1 = red, -1 = blue
 	static var gameActive = false;
 	static func reset() {
-		randomize();
+//		randomize();
 		scaleState = 0;
 		switchRed = false;
 		switchBlue = false;

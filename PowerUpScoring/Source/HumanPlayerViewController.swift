@@ -158,7 +158,8 @@ class HumanPlayerViewController: UIViewController, UIPickerViewDataSource, UIPic
 		AppDelegate.on(event: "reset", callback: {data in
 			self.reset()
 		});
-		
+		pickerTextField.backgroundColor = UIColor.lightGray;
+
 		reset();
 		
 		
